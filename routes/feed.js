@@ -60,6 +60,32 @@ router.delete('/', (req, res, next) => {
     })
 });
 
+//TODO 좋아요 상태 가져오는 로직 보통 어떻게 하는지? //++ 데이터 어떻게 넘기는지?
+/**
+ * 게시글 리스트 가져오기.
+ */
+router.get('/', (req, res, next) => {
+
+    let info = {
+        userId : req.query.userId
+    };
+
+    FEED.getFeed(info, (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            });
+        } else {
+            return res.status(200).json({
+                message: 'Success',
+                code: 1,
+                results: results
+            })
+        }
+    })
+});
+
 /**
  * 게시글 상세.
  */
@@ -80,27 +106,6 @@ router.get('/:feed_id', (req, res, next) => {
                 message: 'Success',
                 code: 1,
                 result: result
-            })
-        }
-    })
-});
-
-/**
- * 게시글 리스트 가져오기.
- */
-router.get('/', (req, res, next) => {
-
-    FEED.getFeed((err, results) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Server Error',
-                code: 0
-            });
-        } else {
-            return res.status(200).json({
-                message: 'Success',
-                code: 1,
-                result: results
             })
         }
     })

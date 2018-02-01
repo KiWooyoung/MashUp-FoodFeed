@@ -85,7 +85,7 @@ class Feed {
 
     //GetAll
     //TODO 보통 feed 좋아요 상태 가져올때, 쿼리 한번에 가져 오나?
-    static getFeed (callback) {
+    static getFeed(info, callback) {
         dbPool.getConnection((err, dbConn) => {
             if (err) {
                 return callback('DB Error');
@@ -102,22 +102,38 @@ class Feed {
                        if (err) {
                            reject(err)
                        } else {
-                           console.log(results);
                            resolve(results)
                        }
                    })
                 });
             };
+            const getAllLikeFeed = () => {
+                return new Promise((resolve, reject) =>  {
+                    let sql = "SELECT post_id FROM post_like WHERE user_id=?;";
 
-            getAllFeed()
-                .then((feeds) => {
-                    dbConn.release();
-                    return callback(null, feeds);
+                    dbConn.query(sql, [info.userId], (err, results) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(results)
+                        }
+                    })
+                })
+            };
+
+            Promise.all([getAllFeed(), getAllLikeFeed()])
+                .then((results) => {
+                    let values = {
+                        feedData : results[0],
+                        likedPostId : results[1]
+                    };
+                    return callback(null, values)
                 })
                 .catch((error) => {
+                    console.log(error);
                     dbConn.release();
-                    return callback(error)
-                })
+                    return callback(error);
+                });
         })
     }
 
@@ -182,6 +198,8 @@ class Feed {
                         }
                     })
                 })
+
+
             };
 
             getDetail()
