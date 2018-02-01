@@ -26,10 +26,7 @@ router.post('/', uploadPostImg, (req, res, next) => {
                 code: 0
             })
         } else {
-            return res.status(200).json({ //204
-                message: "Success",
-                code: 1
-            })
+            return res.status(204).json({})
         }
     });
 });
@@ -58,21 +55,30 @@ router.get('/', (req, res, next) => {
 /**
  * 게시글 수정.
  */
-router.put('/:feed-id', (req, res, next) => {
+router.put('/:feed_id', (req, res, next) => {
 
 });
 
 /**
  * 게시글 삭제
  */
-router.delete('/:feed-id', (req, res, next) => {
+router.delete('/', (req, res, next) => {
 
-    let infp = {
-        userId : req.body.userId,
-        feedId : req.params.feed_id
+    let info = {
+        userId : req.query.user_id,
+        feedId : req.query.feed_id
     };
 
-    FEED
+    FEED.deleteFeed(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            })
+        } else {
+            return res.status(204).json({})
+        }
+    })
 });
 
 /**

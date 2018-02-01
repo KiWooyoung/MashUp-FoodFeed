@@ -119,6 +119,41 @@ class Feed {
                 })
         })
     }
+
+
+    //delete
+    static deleteFeed(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+
+            const removeFeed = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "DELETE FROM post WHERE user_id=? AND id=?;";
+
+                    dbConn.query(sql, [info.userId, info.feedId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    })
+                })
+            };
+
+            removeFeed()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return callback(error);
+                })
+        })
+    }
 }
 
 
