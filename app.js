@@ -1,22 +1,20 @@
 'use strict';
+import express from 'express';
+import path from 'path';
+import favicon from'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 
-const express = require('express');
-// import express from 'express';
-const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-
-const auth = require('./routes/auth');
-const feed = require('./routes/feed');
-const search = require('./routes/search');
-const user = require('./routes/user');
+import auth from './routes/auth';
+import feed from './routes/feed';
+import search from './routes/search';
+import user from './routes/user';
 
 const app = express();
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json';
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
