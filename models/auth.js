@@ -1,9 +1,7 @@
 'use strict';
 import mysql from 'mysql';
 import dbPoolConfig from '../config/mysql_config';
-
 const dbPool = mysql.createPool(dbPoolConfig);
-
 
 class Auth {
     constructor() {}
@@ -33,7 +31,7 @@ class Auth {
                     });
                 });
             };
-
+            //TODO 닉네임 중복 검사.
             let registerOrLogin = (checkResult) => {
                 return new Promise((resolve, reject) => {
                     if (checkResult === 1) {

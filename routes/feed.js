@@ -1,11 +1,14 @@
 'use strict';
 import express from 'express';
+import FEED from '../models/feed'
+import upload from '../service/upload';
+const uploadPostImg = upload.uploadPostImg.single('postImg');
 const router = express.Router();
 
 /**
  * 게시글 작성.
  */
-router.post('/write', (req, res, next) => {
+router.post('/write', uploadPostImg, (req, res, next) => {
   res.send('respond with a resource');
 });
 
@@ -63,4 +66,4 @@ router.get('/:feed_id/like', (req, res, next) => {
 
 
 
-module.exports = router;
+export default router;

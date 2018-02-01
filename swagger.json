@@ -25,7 +25,7 @@
   } ],
   "schemes" : [ "http" ],
   "paths" : {
-    "/auth/register" : {
+    "/auth/facebook" : {
       "post" : {
         "tags" : [ "auth" ],
         "summary" : "register via facebook",
@@ -44,32 +44,6 @@
         "responses" : {
           "201" : {
             "description" : "register successfully"
-          },
-          "500" : {
-            "description" : "server error"
-          }
-        }
-      }
-    },
-    "/auth/login" : {
-      "post" : {
-        "tags" : [ "auth" ],
-        "summary" : "login via facebook",
-        "description" : "ok",
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "description" : "login",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Auth"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
           },
           "500" : {
             "description" : "server error"
