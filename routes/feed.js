@@ -14,9 +14,9 @@ router.post('/', uploadPostImg, (req, res, next) => {
     let info = {
         userId: req.body.userId,
         content: req.body.content,
-        postImgUrl: req.file.location,
         calorie: req.body.calorie,
-        hashtags: req.body.hashtags
+        hashtags: req.body.hashtags,
+        postImgUrl: req.file.location
     };
 
     FEED.writeFeed(info, (err, result) => {
@@ -29,27 +29,6 @@ router.post('/', uploadPostImg, (req, res, next) => {
             return res.status(204).json({})
         }
     });
-});
-
-/**
- * 게시글 리스트 가져오기.
- */
-router.get('/', (req, res, next) => {
-
-    FEED.getFeed((err, results) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Server Error',
-                code: 0
-            });
-        } else {
-            return res.status(200).json({
-                message: 'Success',
-                code: 1,
-                result: results
-            })
-        }
-    })
 });
 
 /**
@@ -84,30 +63,129 @@ router.delete('/', (req, res, next) => {
 /**
  * 게시글 상세.
  */
-router.get('/:feed-id', (req, res, next) => {
+router.get('/:feed_id', (req, res, next) => {
 
+    let info = {
+        feedId : req.params.feed_id
+    };
+
+    FEED.getDetailFeed(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            })
+        } else {
+            return res.status(200).json({
+                message: 'Success',
+                code: 1,
+                result: result
+            })
+        }
+    })
 });
 
+/**
+ * 게시글 리스트 가져오기.
+ */
+router.get('/', (req, res, next) => {
 
+    FEED.getFeed((err, results) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            });
+        } else {
+            return res.status(200).json({
+                message: 'Success',
+                code: 1,
+                result: results
+            })
+        }
+    })
+});
+
+//TODO 좋아요 막누를시 예외 처리 어떻게 하나요~? 혹은 좋아요 로직 어떻게 짜나요 다들~?   / Self Answer : MYSQL(RDB)에서는 똑같은 로우가 계속 생겨도 한번만 지우니까 전부 삭제 됨.
 //TODO Put -> Post아닌가염?,Delete 인가?
 /**
  * 좋아요 하기.
  */
-router.put('/:feed_id/like', (req, res, next) => {
+router.post('/like/:feed_id', (req, res, next) => {
+
+    let info = {
+        feedId : req.params.feed_id,
+        userId : req.body.userId
+    };
+
+    FEED.likeFeed(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            });
+        } else {
+            return res.status(204).json({});
+        }
+    })
 
 });
+//TODO ISSUE : 'Truncated incorrect DOUBLE value: \'13&userId=2\'',  쿼리문 자체를 이상하케 call 한거로만으로 서버 멈춤.
 /**
  * 좋아요 취소.
  */
-router.delete('/:feed_id/like', (req, res, next) => {
+router.delete('/like/:feed_id', (req, res, next) => {
+
+    let info = {
+        feedId : req.params.feed_id,
+        userId : req.query.userId
+    };
+
+    FEED.unlikeFeed(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            });
+        } else {
+            return res.status(204).json({});
+        }
+    })
 
 });
 //TODO 상태를 한개씩만 가져오나?? - 정확히 어떤 상태의 좋아요?
 /**
  * 좋아요 상태 가져오기.
  */
-router.get('/:feed_id/like', (req, res, next) => {
+router.get('/like/:feed_id', (req, res, next) => {
 
+    let info = {
+        feedId : req.params.feed_id,
+        userId : req.query.userId
+    };
+
+    FEED.getLikeStatus(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            });
+        } else {
+            if (result === 'zero') {
+                return res.status(200).json({
+                    message: 'none exist',
+                    code: 1,
+                    is_like : false
+                });
+            } else if (result === 'exist') {
+                return res.status(200).json({
+                    message: 'exist',
+                    code: 2,
+                    is_like : true
+                });
+            }
+        }
+    })
 });
 
 //TODO - feed_image_upload 가 있는데, 이건

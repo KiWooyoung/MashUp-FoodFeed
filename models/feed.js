@@ -84,6 +84,7 @@ class Feed {
     }
 
     //GetAll
+    //TODO 보통 feed 좋아요 상태 가져올때, 쿼리 한번에 가져 오나?
     static getFeed (callback) {
         dbPool.getConnection((err, dbConn) => {
             if (err) {
@@ -92,7 +93,7 @@ class Feed {
 
             const getAllFeed = () => {
                 return new Promise((resolve, reject) => {
-                   let sql = "SELECT U.nickname, P.id, P.calorie, P.content, GROUP_CONCAT(distinct PI.img_url) AS img_url, " +
+                   let sql = "SELECT U.nickname, U.profile_img, P.id, P.calorie, P.content, GROUP_CONCAT(distinct PI.img_url) AS img_url, " +
                        "GROUP_CONCAT(distinct H.name) AS hashtags FROM " +
                        "post P JOIN user U ON U.id=P.user_id JOIN post_image PI " +
                        "ON P.id=PI.post_id JOIN hashtag H ON P.id=H.post_id GROUP BY P.id LIMIT 0, 1000";
@@ -154,6 +155,154 @@ class Feed {
                 })
         })
     }
+
+
+    //getDetail
+    static getDetailFeed(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+
+            const getDetail = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "SELECT U.id AS userId, U.nickname, U.profile_img, " +
+                        "P.id AS feedId, P.calorie, P.content, " +
+                        "GROUP_CONCAT(distinct H.name) AS hashtags, " +
+                        "GROUP_CONCAT(distinct PI.img_url) AS img_url " +
+                        "FROM user U JOIN post P ON U.id=P.user_id " +
+                        "JOIN hashtag H ON P.id=H.post_id JOIN " +
+                        "post_image PI ON P.id=PI.post_id WHERE P.id=?;";
+
+                    dbConn.query(sql, [info.feedId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    })
+                })
+            };
+
+            getDetail()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return callback(error);
+                })
+        })
+    }
+
+
+    //like
+    static likeFeed(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+            const like = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "INSERT INTO post_like(post_id, user_id) VALUES(?,?);";
+
+                    dbConn.query(sql, [info.feedId, info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+                });
+            };
+
+            like()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res);
+                })
+                .catch((error) => {
+                    dbConn.release();
+                    console.log(error);
+                    return callback(error);
+                })
+
+        });
+    };
+
+    //unlike
+    static unlikeFeed(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+            const unLike = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "DELETE FROM post_like WHERE post_id=? AND user_id=?;";
+
+                    dbConn.query(sql, [info.feedId, info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    })
+                })
+            };
+            unLike()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res);
+                })
+                .catch((error) => {
+                    dbConn.release();
+                    console.log(error);
+                    return callback(error);
+                })
+        });
+    };
+
+    //checkLikeFeed
+    static getLikeStatus(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+            const checkLike = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "SELECT * FROM post_like WHERE post_id=? AND user_id=?;";
+                    dbConn.query(sql, [info.feedId, info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            if (result.length === 0) {
+                                resolve(0);
+                            } else {
+                                resolve(100);
+                            }
+                        }
+                    })
+                })
+            };
+            checkLike()
+                .then((res) => {
+                    dbConn.release();
+                    if (res === 0) {
+                       return callback(null, 'zero');
+                    } else {
+                        return callback(null, 'exist');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return callback(error);
+                })
+
+        });
+    };
 }
 
 
