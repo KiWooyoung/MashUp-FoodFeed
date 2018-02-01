@@ -50,6 +50,84 @@
           }
         }
       }
+    },
+    "/feed" : {
+      "post" : {
+        "tags" : [ "feed" ],
+        "summary" : "register via facebook",
+        "description" : "ok",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "register",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Auth"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "register successfully"
+          },
+          "500" : {
+            "description" : "server error"
+          }
+        }
+      }
+    },
+    "/feed/:feed_id" : {
+      "put" : {
+        "tags" : [ "feed" ],
+        "summary" : "register via facebook",
+        "description" : "ok",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "register",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Auth"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "register successfully"
+          },
+          "500" : {
+            "description" : "server error"
+          }
+        }
+      }
+    },
+    "/feed/:feed_id" : {
+      "delete" : {
+        "tags" : [ "feed" ],
+        "summary" : "register via facebook",
+        "description" : "ok",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "register",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Auth"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "register successfully"
+          },
+          "500" : {
+            "description" : "server error"
+          }
+        }
+      }
     }
   },
   "definitions" : {

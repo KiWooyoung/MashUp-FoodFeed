@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start":"nodemon ./bin/www --exec babel-node --presets es2015,stage-3",
+    "start": "nodemon ./bin/www --exec babel-node --presets es2015,stage-3",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "async": "^2.6.0",
+    "aws-sdk": "^2.188.0",
     "babel-eslint": "^8.2.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",

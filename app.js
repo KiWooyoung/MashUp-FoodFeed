@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', auth);
-app.use('/feeds', feed);
+app.use('/feed', feed);
 app.use('/search', search);
 app.use('/users', user);
 
