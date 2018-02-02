@@ -107,7 +107,7 @@ class Feed {
                    })
                 });
             };
-            const getAllLikeFeed = () => {
+            const getAllLikedFeed = () => {
                 return new Promise((resolve, reject) =>  {
                     let sql = "SELECT post_id FROM post_like WHERE user_id=?;";
 
@@ -121,12 +121,13 @@ class Feed {
                 })
             };
 
-            Promise.all([getAllFeed(), getAllLikeFeed()])
+            Promise.all([getAllFeed(), getAllLikedFeed()])
                 .then((results) => {
                     let values = {
                         feedData : results[0],
                         likedPostId : results[1]
                     };
+                    dbConn.release();
                     return callback(null, values)
                 })
                 .catch((error) => {

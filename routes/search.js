@@ -42,18 +42,39 @@ router.get('/rcmd/user', (req, res, next) => {
 });
 
 // real search
+/**
+ *  Request :
+ *      startKalorie  - default :0 (require)
+ *      endKalorie  - default :700 (require)
+ *      hashtag(Ingredient) - one (option)
+ *      nickname - one (option)
+ *
+ *  Response :
+ *      shara~~ shara~~
+ *
+ */
 router.get('/', (req, res, next) => {
 
     let info = {
-        startKalorie : start_kalorie,
-        endKalorie : end_kalorie
+        userId : req.query.userId,
+        startKalorie : req.query.startKalorie,
+        endKalorie : req.query.endKalorie,
+        hashtag : req.query.hashtag,
+        nickname : req.query.nickname
     };
 
-    SEARCH.search((err, result) => {
+    SEARCH.search(info, (err, results) => {
         if (err) {
-
+            return res.status(500).json({
+                message: "Server Error",
+                code: 0,
+            })
         } else {
-
+            return res.status(200).json({
+                message: "Success",
+                code: 1,
+                results: results
+            })
         }
     });
 });
