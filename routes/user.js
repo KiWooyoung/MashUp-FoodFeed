@@ -57,10 +57,25 @@ router.get('/:user_id/feeds', (req, res, next) => {
 });
 
 /**
- * 유저 정보 수정하기.
+ * 유저 정보 수정하기
  */
 router.put('/:user_id', (req, res, next) => {
-    
+
+    let info = {
+        userId : req.params.user_id,
+        profileMessage : req.body.profileMessage
+    };
+
+    USER.modifyUserInfo(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            })
+        } else {
+            return res.status(204).json({})
+        }
+    })
 });
 
 /**
@@ -177,4 +192,4 @@ router.get('/:user_id/follow', (req, res, next) => {
     })
 });
 
-module.exports = router;
+export default router;

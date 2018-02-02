@@ -85,6 +85,36 @@ class User {
         });
     }
 
+    static modifyUserInfo(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+            const modifyInfo = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "UPDATE user SET profile_message=? WHERE id=?;";
+                    dbConn.query(sql, [info.profileMessage, info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result)
+                        }
+                    })
+                })
+            };
+            modifyInfo()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return callback(error);
+                })
+        })
+    }
+
     //uploadProfileImg
     static uploadProfileImg(info, callback) {
         dbPool.getConnection((err, dbConn) => {
@@ -98,7 +128,6 @@ class User {
                         if (err) {
                             reject(err);
                         } else {
-                            console.log(result);
                             resolve(result)
                         }
                     })
