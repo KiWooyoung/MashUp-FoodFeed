@@ -93,7 +93,7 @@ class Feed {
 
             const getAllFeed = () => {
                 return new Promise((resolve, reject) => {
-                   let sql = "SELECT U.nickname, U.profile_img, P.id, P.calorie, P.content, GROUP_CONCAT(distinct PI.img_url) AS img_url, " +
+                   let sql = "SELECT U.id AS userId, U.nickname, U.profile_img, P.id AS feed_id, P.calorie, P.content, GROUP_CONCAT(distinct PI.img_url) AS img_url, " +
                        "GROUP_CONCAT(distinct H.name) AS hashtags FROM " +
                        "post P JOIN user U ON U.id=P.user_id JOIN post_image PI " +
                        "ON P.id=PI.post_id JOIN hashtag H ON P.id=H.post_id GROUP BY P.id LIMIT 0, 1000";

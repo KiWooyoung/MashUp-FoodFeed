@@ -180,13 +180,13 @@ router.get('/like/:feed_id', (req, res, next) => {
                 return res.status(200).json({
                     message: 'none exist',
                     code: 1,
-                    is_like : false
+                    isLike : false
                 });
             } else if (result === 'exist') {
                 return res.status(200).json({
                     message: 'exist',
                     code: 2,
-                    is_like : true
+                    isLike : true
                 });
             }
         }

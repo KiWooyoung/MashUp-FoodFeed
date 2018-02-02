@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', auth);
 app.use('/feed', feed);
 app.use('/search', search);
-app.use('/users', user);
+app.use('/user', user);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
