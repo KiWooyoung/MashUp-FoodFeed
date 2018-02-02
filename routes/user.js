@@ -9,11 +9,22 @@ const router = express.Router();
 router.get('/:user_id', (req, res, next) => {
 
     let info = {
-        userId : req.params.userId
+        userId : req.params.user_id
     };
 
     USER.getUserInfo(info, (err, result) => {
-
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            })
+        } else {
+            return res.status(200).json({
+                message: 'Success',
+                code: 1,
+                result: result
+            })
+        }
     })
 
 });
@@ -21,21 +32,21 @@ router.get('/:user_id', (req, res, next) => {
 /**
  * 유저 Feed 가져오기.
  */
-router.get('/:user_name/feeds', (req, res, next) => {
+router.get('/:user_id/feeds', (req, res, next) => {
 
 });
 
 /**
  * 유저 정보 수정하기.
  */
-router.put('/:user_name', (req, res, next) => {
+router.put('/:user_id', (req, res, next) => {
 
 });
 
 /**
  * 프로필 사진 업로드.
  */
-router.put('/:user_name/images/upload', (req, res, next) => {
+router.put('/:user_id/images/upload', (req, res, next) => {
 
 });
 
@@ -47,11 +58,11 @@ router.put('/:user_name/images/upload', (req, res, next) => {
  *      팔로우 당하는 사람 = followingId(따라가는중인 ID)
  * }
  */
-router.post('/:user_name/follow', (req, res, next) => {
+router.post('/:user_id/follow', (req, res, next) => {
 
     let info = {
         followerId : req.query.followerUserId, //추종자
-        followingId : req.params.user_name
+        followingId : req.params.user_id
     };
 
     USER.followUser(info, (err, result) => {
@@ -73,11 +84,11 @@ router.post('/:user_name/follow', (req, res, next) => {
  *      언팔로우 당하는 사람 = followingId(따라가는중인 ID)
  * }
  */
-router.delete('/:user_name/follow', (req, res, next) => {
+router.delete('/:user_id/follow', (req, res, next) => {
 
     let info = {
         followerId : req.query.followerUserId,  //추종자
-        followingId : req.params.user_name
+        followingId : req.params.user_id
     };
 
     USER.unFollowUser(info, (err, result) => {
@@ -95,11 +106,11 @@ router.delete('/:user_name/follow', (req, res, next) => {
 /**
  * 특정 게시물 Follow 상태 가져오기.
  */
-router.get('/:user_name/follow', (req, res, next) => {
+router.get('/:user_id/follow', (req, res, next) => {
 
     let info = {
         followerId : req.query.followerUserId,  //추종자
-        followingId : req.params.user_name
+        followingId : req.params.user_id
     };
 
     USER.isFollower(info, (err, result) => {

@@ -11,10 +11,37 @@ class User {
             if (err) {
                 return callback('DB Error');
             }
-
             const selectUserInfo = () => {
-
-            }
+                return new Promise((resolve, reject) => {
+                    let sql = "SELECT U.id, U.nickname, " +
+                        "U.profile_message, U.profile_img, " +
+                        "(SELECT COUNT(*) FROM post WHERE user_id=?) " +
+                        "AS feed_num, " +
+                        "(SELECT COUNT(*) FROM follow WHERE following_id=?) " +
+                        "AS follower_num,  " +
+                        "(SELECT COUNT(*) FROM follow WHERE follower_id=?) " +
+                        "AS following_num  " +
+                        "FROM user U WHERE U.id=?;";
+                    dbConn.query(sql, [info.userId, info.userId, info.userId, info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            console.log(result);
+                            resolve(result);
+                        }
+                    })
+                })
+            };
+            selectUserInfo()
+                .then((userInfo) => {
+                    dbConn.release();
+                    return callback(null, userInfo);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return calblack(error);
+                })
         })
     }
 
