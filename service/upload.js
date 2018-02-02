@@ -11,7 +11,7 @@ AWS.config.secretAccessKey = config.secretAccessKey;
 const bucketName = config.bucketName;
 const s3 = new AWS.S3({params: {Bucket: bucketName}});
 
-const uploadPostImg = multer({
+const uploadImg = multer({
     storage: multerS3({
         s3: s3,
         bucket: bucketName,
@@ -40,4 +40,4 @@ function generateRandom(min, max) {
     return str;
 }
 
-export default uploadPostImg;
+export default uploadImg;

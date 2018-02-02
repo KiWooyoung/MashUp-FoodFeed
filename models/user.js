@@ -47,7 +47,74 @@ class User {
 
     //getUserFeeds
     static getUserFeeds(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+            const getFeeds = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "SELECT U.id AS userId, U.nickname, U.profile_img, " +
+                        "P.id AS feed_id, P.calorie, P.content, " +
+                        "GROUP_CONCAT(distinct PI.img_url) AS img_url, " +
+                        "GROUP_CONCAT(distinct H.name) AS hashtags " +
+                        "FROM post P JOIN user U ON U.id=P.user_id " +
+                        "JOIN post_image PI ON P.id=PI.post_id " +
+                        "JOIN hashtag H ON P.id=H.post_id " +
+                        "WHERE U.id=? " +
+                        "GROUP BY P.id " +
+                        "LIMIT 0, 1000;";
+                    dbConn.query(sql, [info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result)
+                        }
+                    })
+                })
+            };
+            getFeeds()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return callback(error);
+                })
+        });
+    }
 
+    //uploadProfileImg
+    static uploadProfileImg(info, callback) {
+        dbPool.getConnection((err, dbConn) => {
+            if (err) {
+                return callback('DB Error');
+            }
+            const updateUserProfileImg = () => {
+                return new Promise((resolve, reject) => {
+                    let sql = "UPDATE user SET profile_img=? WHERE id=?;";
+                    dbConn.query(sql, [info.profileImgUrl, info.userId], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            console.log(result);
+                            resolve(result)
+                        }
+                    })
+                })
+            };
+            updateUserProfileImg()
+                .then((res) => {
+                    dbConn.release();
+                    return callback(null, res)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    dbConn.release();
+                    return callback(error);
+                })
+        })
     }
 
     //followUser

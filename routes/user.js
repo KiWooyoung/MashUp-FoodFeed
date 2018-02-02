@@ -1,6 +1,8 @@
 'use strict';
 import express from 'express';
 import USER from '../models/user';
+import upload from '../service/upload';
+const uploadProfileImg = upload.single('profileImg');
 const router = express.Router();
 
 /**
@@ -34,20 +36,58 @@ router.get('/:user_id', (req, res, next) => {
  */
 router.get('/:user_id/feeds', (req, res, next) => {
 
+    let info = {
+        userId : req.params.user_id
+    };
+
+    USER.getUserFeeds(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            })
+        } else {
+            return res.status(200).json({
+                message: 'Success',
+                code: 1,
+                result: result
+            })
+        }
+    })
 });
 
 /**
  * 유저 정보 수정하기.
  */
 router.put('/:user_id', (req, res, next) => {
-
+    
 });
 
 /**
  * 프로필 사진 업로드.
  */
-router.put('/:user_id/images/upload', (req, res, next) => {
+router.put('/:user_id/profile-images/upload', uploadProfileImg, (req, res, next) => {
 
+    let info = {
+        userId : req.params.user_id,
+        profileImgUrl: req.file.location
+    };
+    console.log(info);
+
+    USER.uploadProfileImg(info, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Server Error',
+                code: 0
+            })
+        } else {
+            return res.status(200).json({
+                message: 'Success',
+                code: 1,
+                profileImgUrl: info.profileImgUrl
+            })
+        }
+    })
 });
 
 //Todo post 아닌가? why put?
