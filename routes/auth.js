@@ -4,6 +4,7 @@ import Auth from '../models/auth';
 const router = express.Router();
 
 //TODO 토큰 쓸껀지 확실히 하기. 그리고, 요청 값도.
+//TODO facebookCode 를 UQ 하게 다시 예외처리 해야한다.
 router.post('/facebook', (req, res, next) => {
 
     let info = {

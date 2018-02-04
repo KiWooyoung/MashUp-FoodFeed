@@ -1,8 +1,8 @@
 const constant = {
     fullSql : 'SELECT U.id AS userId, ' +
-    'U.nickname, U.profile_img, ' +
-    'P.id AS feed_id, P.calorie, P.content, ' +
-    'GROUP_CONCAT(distinct PI.img_url) AS img_url, ' +
+    'U.nickname, U.profile_img AS profileImg, ' +
+    'P.id AS feedId, P.calorie, P.content, ' +
+    'GROUP_CONCAT(distinct PI.img_url) AS imgUrl, ' +
     'GROUP_CONCAT(distinct H.name) AS hashtags ' +
     'FROM post P JOIN user U ON U.id=P.user_id ' +
     'JOIN post_image PI ON P.id=PI.post_id ' +
@@ -13,9 +13,9 @@ const constant = {
     'Having Find_In_Set(?,hashtags) ' +
     'LIMIT 0, 1000;',
     omitTagSql : 'SELECT U.id AS userId, ' +
-    'U.nickname, U.profile_img, ' +
-    'P.id AS feed_id, P.calorie, P.content, ' +
-    'GROUP_CONCAT(distinct PI.img_url) AS img_url, ' +
+    'U.nickname, U.profile_img AS profileImg, ' +
+    'P.id AS feedId, P.calorie, P.content, ' +
+    'GROUP_CONCAT(distinct PI.img_url) AS imgUrl, ' +
     'GROUP_CONCAT(distinct H.name) AS hashtags ' +
     'FROM post P JOIN user U ON U.id=P.user_id ' +
     'JOIN post_image PI ON P.id=PI.post_id ' +
@@ -25,9 +25,9 @@ const constant = {
     'GROUP BY P.id ' +
     'LIMIT 0, 1000;',
     omitNameSql : 'SELECT U.id AS userId, ' +
-    'U.nickname, U.profile_img, ' +
-    'P.id AS feed_id, P.calorie, P.content, ' +
-    'GROUP_CONCAT(distinct PI.img_url) AS img_url, ' +
+    'U.nickname, U.profile_img AS profileImg, ' +
+    'P.id AS feedId, P.calorie, P.content, ' +
+    'GROUP_CONCAT(distinct PI.img_url) AS imgUrl, ' +
     'GROUP_CONCAT(distinct H.name) AS hashtags ' +
     'FROM post P JOIN user U ON U.id=P.user_id ' +
     'JOIN post_image PI ON P.id=PI.post_id ' +
@@ -37,9 +37,9 @@ const constant = {
     'Having Find_In_Set(?,hashtags) ' +
     'LIMIT 0, 1000;',
     onlyKalSql : 'SELECT U.id AS userId, ' +
-    'U.nickname, U.profile_img, ' +
-    'P.id AS feed_id, P.calorie, P.content, ' +
-    'GROUP_CONCAT(distinct PI.img_url) AS img_url, ' +
+    'U.nickname, U.profile_img AS profileImg, ' +
+    'P.id AS feedId, P.calorie, P.content, ' +
+    'GROUP_CONCAT(distinct PI.img_url) AS imgUrl, ' +
     'GROUP_CONCAT(distinct H.name) AS hashtags ' +
     'FROM post P JOIN user U ON U.id=P.user_id ' +
     'JOIN post_image PI ON P.id=PI.post_id ' +

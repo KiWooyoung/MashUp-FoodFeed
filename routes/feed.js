@@ -41,11 +41,11 @@ router.put('/:feed_id', (req, res, next) => {
 /**
  * 게시글 삭제
  */
-router.delete('/', (req, res, next) => {
+router.delete('/:feed_id', (req, res, next) => {
 
     let info = {
         userId : req.query.user_id,
-        feedId : req.query.feed_id
+        feedId : req.params.feed_id
     };
 
     FEED.deleteFeed(info, (err, result) => {
@@ -116,6 +116,9 @@ router.get('/:feed_id', (req, res, next) => {
 /**
  * 좋아요 하기.
  */
+
+
+//TODO post는 body로 보내고, delete 는 query, 로 보내고 등등 다르다. 어떻게 통일 해야 할까???
 router.post('/like/:feed_id', (req, res, next) => {
 
     let info = {
@@ -175,7 +178,7 @@ router.get('/like/:feed_id', (req, res, next) => {
                 message: 'Server Error',
                 code: 0
             });
-        } else {
+        } else {  //TODO 생각해보니까, 그냥 isLike값 넘기면 됬었네, 나중에 수정하자.
             if (result === 'zero') {
                 return res.status(200).json({
                     message: 'none exist',

@@ -57,8 +57,8 @@ router.get('/', (req, res, next) => {
 
     let info = {
         userId : req.query.userId,
-        startKalorie : req.query.startKalorie,
-        endKalorie : req.query.endKalorie,
+        startCalorie : req.query.startCalorie,
+        endCalorie : req.query.endCalorie,
         hashtag : req.query.hashtag,
         nickname : req.query.nickname
     };
