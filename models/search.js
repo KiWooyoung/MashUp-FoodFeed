@@ -28,23 +28,23 @@ class Search {
             console.log(info.hashtag);
             if (typeof info.hashtag === 'undefined' && typeof info.nickname === 'undefined') {
                 sql = SQLS.onlyKalSql;
-                data.push(info.startKalorie);
-                data.push(info.endKalorie);
+                data.push(info.startCalorie);
+                data.push(info.endCalorie);
             } else if (typeof info.hashtag === 'undefined') {
                 sql = SQLS.omitTagSql;
                 data.push(info.nickname);
-                data.push(info.startKalorie);
-                data.push(info.endKalorie);
+                data.push(info.startCalorie);
+                data.push(info.endCalorie);
             } else if (typeof info.nickname === 'undefined') {
                 sql = SQLS.omitNameSql;
-                data.push(info.startKalorie);
-                data.push(info.endKalorie);
+                data.push(info.startCalorie);
+                data.push(info.endCalorie);
                 data.push(info.hashtag);
             } else {
                 sql = SQLS.fullSql;
                 data.push(info.nickname);
-                data.push(info.startKalorie);
-                data.push(info.endKalorie);
+                data.push(info.startCalorie);
+                data.push(info.endCalorie);
                 data.push(info.hashtag);
             }
             const getSearchdFeedData = () => {
