@@ -1,130 +1,634 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "App developement Organization - MashUp : FoodFeed Backend API Swagger Document\n",
+    "description" : "App Developement Organization - MashUp : FoodFeed Backend API Swagger Document\nIf you have any questions, please contact me.\n",
     "version" : "1.0.0",
     "title" : "FoodFeed",
     "contact" : {
+      "name" : "KiWooyoung",
       "email" : "ueong777@gmail.com"
     }
   },
-  "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/woozero-k/foodfeed/1.0.0",
+  "host" : "52.78.80.125:3003/",
+  "basePath" : "",
   "tags" : [ {
     "name" : "auth",
-    "description" : "register, login, nickname_check"
+    "description" : "register && login"
   }, {
     "name" : "feed",
-    "description" : "write, delete, modify, list, detail, like, unlike, is_like,"
+    "description" : "write, delete, modify, list, detail, like, dislike, is_like,"
   }, {
     "name" : "search",
-    "description" : "search"
+    "description" : "search, rcmd_ingredient, rcmd_user"
   }, {
     "name" : "user",
-    "description" : "info_detail, user_feeds, follow, unfollow, modify"
+    "description" : "user_info_detail, user_feeds, follow, unfollow, user_info_modify, upload_profileImg"
   } ],
   "schemes" : [ "http" ],
   "paths" : {
     "/auth/facebook" : {
       "post" : {
         "tags" : [ "auth" ],
-        "summary" : "register via facebook",
-        "description" : "ok",
+        "description" : "register and login via facebook",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "description" : "register",
+          "description" : "necessary data",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/Auth"
+            "$ref" : "#/definitions/body"
           }
         } ],
         "responses" : {
-          "201" : {
-            "description" : "register successfully"
+          "200" : {
+            "description" : "register successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200"
+            }
           },
           "500" : {
-            "description" : "server error"
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
           }
         }
       }
     },
     "/feed" : {
+      "get" : {
+        "tags" : [ "feed" ],
+        "description" : "get all feed",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "succeed in getting feeds",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_1"
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "feed" ],
-        "summary" : "register via facebook",
-        "description" : "ok",
-        "consumes" : [ "application/json" ],
+        "description" : "upload feed",
+        "consumes" : [ "multipart/form-data" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "description" : "register",
+          "name" : "userId",
+          "in" : "formData",
+          "description" : "user PK",
           "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Auth"
-          }
+          "type" : "integer"
+        }, {
+          "name" : "content",
+          "in" : "formData",
+          "description" : "feed content",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "calorie",
+          "in" : "formData",
+          "description" : "food calorie",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "hashtags",
+          "in" : "formData",
+          "description" : "feed hashtags (many)",
+          "required" : true,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        }, {
+          "name" : "postImg",
+          "in" : "formData",
+          "description" : "image to upload (one)",
+          "required" : true,
+          "type" : "file"
         } ],
         "responses" : {
-          "201" : {
-            "description" : "register successfully"
+          "204" : {
+            "description" : "upload successfully"
           },
           "500" : {
-            "description" : "server error"
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
           }
         }
       }
     },
-    "/feed/:feed_id" : {
+    "/feed/{feed_id}" : {
+      "get" : {
+        "tags" : [ "feed" ],
+        "description" : "get a detail feed",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "feed_id",
+          "in" : "path",
+          "description" : "feedId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "get a detail feed successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_2"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
       "put" : {
         "tags" : [ "feed" ],
-        "summary" : "register via facebook",
-        "description" : "ok",
+        "description" : "I have not yet done this.",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "description" : "register",
+          "name" : "feed_id",
+          "in" : "path",
+          "description" : "feedId (PK)",
           "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Auth"
-          }
+          "type" : "integer"
         } ],
         "responses" : {
-          "201" : {
-            "description" : "register successfully"
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "feed" ],
+        "description" : "delete particular feed  (Ex - /feed/3?userId=2)",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "feed_id",
+          "in" : "path",
+          "description" : "feedId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "delete successfully"
           },
           "500" : {
-            "description" : "server error"
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
           }
         }
       }
     },
-    "/feed/:feed_id" : {
-      "delete" : {
+    "/feed/like/{feed_id}" : {
+      "get" : {
         "tags" : [ "feed" ],
-        "summary" : "register via facebook",
-        "description" : "ok",
+        "description" : "I have not yet done this.",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "feed_id",
+          "in" : "path",
+          "description" : "feedId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "succeed in getting a isLike",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_3"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "feed" ],
+        "description" : "like a feed",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "feed_id",
+          "in" : "path",
+          "description" : "feedId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
           "in" : "body",
           "name" : "body",
-          "description" : "register",
+          "description" : "necessary data",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/Auth"
+            "$ref" : "#/definitions/body_1"
           }
         } ],
         "responses" : {
-          "201" : {
-            "description" : "register successfully"
+          "204" : {
+            "description" : "Success"
           },
           "500" : {
-            "description" : "server error"
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "feed" ],
+        "description" : "dislike a feed",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "feed_id",
+          "in" : "path",
+          "description" : "feedId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/search" : {
+      "get" : {
+        "tags" : [ "search" ],
+        "description" : "I have not yet done this.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "startCalorie",
+          "in" : "query",
+          "description" : "Calorie",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "endCalorie",
+          "in" : "query",
+          "description" : "Calorie",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "hashtag",
+          "in" : "query",
+          "description" : "hashtag (one / option)",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "nickname",
+          "in" : "query",
+          "description" : "nickname (one / option)",
+          "required" : false,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "succeed in searching a feed",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_1"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/search/rcmd/ingredient" : {
+      "get" : {
+        "tags" : [ "search" ],
+        "description" : "get data",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "get data successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_4"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/search/rcmd/user" : {
+      "get" : {
+        "tags" : [ "search" ],
+        "description" : "get data",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "get data successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_5"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{user_id}" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "description" : "get user basic info",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "get data successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_6"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "user" ],
+        "description" : "modify user message",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "necessary data",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_2"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "modify successfully"
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{user_id}/feeds" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "description" : "get user feeds",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "get data successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_7"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{user_id}/profile-images/upload" : {
+      "put" : {
+        "tags" : [ "user" ],
+        "description" : "upload user profile img",
+        "consumes" : [ "multipart/form-data" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "profileImg",
+          "in" : "formData",
+          "description" : "Image to upload",
+          "required" : true,
+          "type" : "file"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "upload successfully",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_8"
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      }
+    },
+    "/user/{user_id}/follow" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "description" : "get follow data",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "followerUserId",
+          "in" : "query",
+          "description" : "userId (PK)",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "get data successfully"
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "user" ],
+        "description" : "follow user",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK) / user is followed by follower",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "necessary data",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_3"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "follow successfully"
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "user" ],
+        "description" : "unfollow user",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "userId (PK) / user is unfollowed by unfollower",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "unfollowerUserId",
+          "in" : "query",
+          "description" : "userId (PK) / unfollower",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "unfollow successfully"
+          },
+          "500" : {
+            "description" : "Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/ServerError"
+            }
           }
         }
       }
@@ -159,14 +663,480 @@
           "type" : "boolean",
           "default" : false
         }
+      }
+    },
+    "ServerError" : {
+      "type" : "object",
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Server Error"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 0
+        }
+      }
+    },
+    "authResponse" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "nickname" : {
+          "type" : "string",
+          "example" : "기우영"
+        },
+        "facebookCode" : {
+          "type" : "string",
+          "example" : "11012380901233"
+        }
       },
       "example" : {
-        "petId" : 6,
-        "quantity" : 1,
-        "id" : 0,
-        "shipDate" : "2000-01-23T04:56:07.000+00:00",
-        "complete" : false,
-        "status" : "placed"
+        "nickname" : "기우영",
+        "facebookCode" : "11012380901233",
+        "id" : 1
+      }
+    },
+    "getAllFeedResponse" : {
+      "type" : "object",
+      "properties" : {
+        "feedData" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FeedDataObjectModel"
+          }
+        },
+        "likedPostId" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/LikedPostIdObjectModel"
+          }
+        }
+      },
+      "example" : {
+        "feedData" : [ {
+          "imgUrl" : "www.aws.com/asdf/feedimg/3",
+          "hashtags" : "쥐방울콩,토마토,브로콜리",
+          "feedId" : 1,
+          "nickname" : "기우영",
+          "calorie" : 500,
+          "profileImg" : "www.aws.com/asdf/profile/3",
+          "userId" : 1,
+          "content" : "배가 불러요~~"
+        }, {
+          "imgUrl" : "www.aws.com/asdf/feedimg/3",
+          "hashtags" : "쥐방울콩,토마토,브로콜리",
+          "feedId" : 1,
+          "nickname" : "기우영",
+          "calorie" : 500,
+          "profileImg" : "www.aws.com/asdf/profile/3",
+          "userId" : 1,
+          "content" : "배가 불러요~~"
+        } ],
+        "likedPostId" : [ {
+          "postId" : 1
+        }, {
+          "postId" : 1
+        } ]
+      }
+    },
+    "getUserBasicInfo" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "nickname" : {
+          "type" : "string",
+          "example" : "김동현"
+        },
+        "profileMessage" : {
+          "type" : "string",
+          "example" : "나의 음식 사진첩"
+        },
+        "feedNum" : {
+          "type" : "integer",
+          "example" : 8
+        },
+        "followerNum" : {
+          "type" : "integer",
+          "example" : 50
+        },
+        "followingNum" : {
+          "type" : "integer",
+          "example" : 70
+        }
+      },
+      "example" : {
+        "profileMessage" : "나의 음식 사진첩",
+        "followerNum" : 50,
+        "nickname" : "김동현",
+        "id" : 1,
+        "feedNum" : 8,
+        "followingNum" : 70
+      }
+    },
+    "FeedDataObjectModel" : {
+      "type" : "object",
+      "properties" : {
+        "userId" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "nickname" : {
+          "type" : "string",
+          "example" : "기우영"
+        },
+        "profileImg" : {
+          "type" : "string",
+          "example" : "www.aws.com/asdf/profile/3"
+        },
+        "feedId" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "calorie" : {
+          "type" : "integer",
+          "example" : 500
+        },
+        "content" : {
+          "type" : "string",
+          "example" : "배가 불러요~~"
+        },
+        "imgUrl" : {
+          "type" : "string",
+          "example" : "www.aws.com/asdf/feedimg/3"
+        },
+        "hashtags" : {
+          "type" : "string",
+          "example" : "쥐방울콩,토마토,브로콜리"
+        }
+      },
+      "example" : {
+        "imgUrl" : "www.aws.com/asdf/feedimg/3",
+        "hashtags" : "쥐방울콩,토마토,브로콜리",
+        "feedId" : 1,
+        "nickname" : "기우영",
+        "calorie" : 500,
+        "profileImg" : "www.aws.com/asdf/profile/3",
+        "userId" : 1,
+        "content" : "배가 불러요~~"
+      }
+    },
+    "LikedPostIdObjectModel" : {
+      "type" : "object",
+      "properties" : {
+        "postId" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      },
+      "example" : {
+        "postId" : 1
+      }
+    },
+    "body" : {
+      "type" : "object",
+      "properties" : {
+        "facebookUserNickname" : {
+          "type" : "string",
+          "example" : "기우영",
+          "description" : "facebook user name"
+        },
+        "facebookCode" : {
+          "type" : "string",
+          "example" : "11012380901233",
+          "description" : "facebook UQ code"
+        }
+      }
+    },
+    "inline_response_200" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "$ref" : "#/definitions/authResponse"
+        }
+      },
+      "example" : {
+        "result" : {
+          "nickname" : "기우영",
+          "facebookCode" : "11012380901233",
+          "id" : 1
+        },
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "inline_response_200_1" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "$ref" : "#/definitions/getAllFeedResponse"
+        }
+      },
+      "example" : {
+        "result" : {
+          "feedData" : [ {
+            "imgUrl" : "www.aws.com/asdf/feedimg/3",
+            "hashtags" : "쥐방울콩,토마토,브로콜리",
+            "feedId" : 1,
+            "nickname" : "기우영",
+            "calorie" : 500,
+            "profileImg" : "www.aws.com/asdf/profile/3",
+            "userId" : 1,
+            "content" : "배가 불러요~~"
+          }, {
+            "imgUrl" : "www.aws.com/asdf/feedimg/3",
+            "hashtags" : "쥐방울콩,토마토,브로콜리",
+            "feedId" : 1,
+            "nickname" : "기우영",
+            "calorie" : 500,
+            "profileImg" : "www.aws.com/asdf/profile/3",
+            "userId" : 1,
+            "content" : "배가 불러요~~"
+          } ],
+          "likedPostId" : [ {
+            "postId" : 1
+          }, {
+            "postId" : 1
+          } ]
+        },
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "inline_response_200_2" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "$ref" : "#/definitions/FeedDataObjectModel"
+        }
+      },
+      "example" : {
+        "result" : {
+          "imgUrl" : "www.aws.com/asdf/feedimg/3",
+          "hashtags" : "쥐방울콩,토마토,브로콜리",
+          "feedId" : 1,
+          "nickname" : "기우영",
+          "calorie" : 500,
+          "profileImg" : "www.aws.com/asdf/profile/3",
+          "userId" : 1,
+          "content" : "배가 불러요~~"
+        },
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "inline_response_200_3" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "isLike" : {
+          "type" : "boolean",
+          "example" : true
+        }
+      },
+      "example" : {
+        "code" : 1,
+        "isLike" : true,
+        "message" : "Success"
+      }
+    },
+    "body_1" : {
+      "type" : "object",
+      "properties" : {
+        "userId" : {
+          "type" : "integer",
+          "example" : 1,
+          "description" : "userId (PK)"
+        }
+      }
+    },
+    "inline_response_200_4" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "병아리콩"
+          }
+        }
+      },
+      "example" : {
+        "result" : [ "병아리콩", "병아리콩" ],
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "inline_response_200_5" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "고은이"
+          }
+        }
+      },
+      "example" : {
+        "result" : [ "고은이", "고은이" ],
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "inline_response_200_6" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "$ref" : "#/definitions/getUserBasicInfo"
+        }
+      },
+      "example" : {
+        "result" : {
+          "profileMessage" : "나의 음식 사진첩",
+          "followerNum" : 50,
+          "nickname" : "김동현",
+          "id" : 1,
+          "feedNum" : 8,
+          "followingNum" : 70
+        },
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "body_2" : {
+      "type" : "object",
+      "properties" : {
+        "profileMessage" : {
+          "type" : "string",
+          "example" : "나만의 사진첩"
+        }
+      }
+    },
+    "inline_response_200_7" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "result" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FeedDataObjectModel"
+          }
+        }
+      },
+      "example" : {
+        "result" : [ {
+          "imgUrl" : "www.aws.com/asdf/feedimg/3",
+          "hashtags" : "쥐방울콩,토마토,브로콜리",
+          "feedId" : 1,
+          "nickname" : "기우영",
+          "calorie" : 500,
+          "profileImg" : "www.aws.com/asdf/profile/3",
+          "userId" : 1,
+          "content" : "배가 불러요~~"
+        }, {
+          "imgUrl" : "www.aws.com/asdf/feedimg/3",
+          "hashtags" : "쥐방울콩,토마토,브로콜리",
+          "feedId" : 1,
+          "nickname" : "기우영",
+          "calorie" : 500,
+          "profileImg" : "www.aws.com/asdf/profile/3",
+          "userId" : 1,
+          "content" : "배가 불러요~~"
+        } ],
+        "code" : 1,
+        "message" : "Success"
+      }
+    },
+    "inline_response_200_8" : {
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "example" : "Success"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "profileImgUrl" : {
+          "type" : "string",
+          "example" : "www.aws.com/img/asd/2"
+        }
+      },
+      "example" : {
+        "code" : 1,
+        "profileImgUrl" : "www.aws.com/img/asd/2",
+        "message" : "Success"
+      }
+    },
+    "body_3" : {
+      "type" : "object",
+      "properties" : {
+        "followerUserId" : {
+          "type" : "integer",
+          "example" : 1,
+          "description" : "userId (PK) / follower"
+        }
       }
     }
   },

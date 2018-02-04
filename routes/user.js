@@ -116,8 +116,8 @@ router.put('/:user_id/profile-images/upload', uploadProfileImg, (req, res, next)
 router.post('/:user_id/follow', (req, res, next) => {
 
     let info = {
-        followerId : req.query.followerUserId, //추종자
-        followingId : req.params.user_id
+        followerId : req.body.followerUserId, //추종자
+        followingId : req.params.user_id //followed Id
     };
 
     USER.followUser(info, (err, result) => {
@@ -142,7 +142,7 @@ router.post('/:user_id/follow', (req, res, next) => {
 router.delete('/:user_id/follow', (req, res, next) => {
 
     let info = {
-        followerId : req.query.followerUserId,  //추종자
+        unfollowerId : req.query.unfollowerUserId,  //추종자
         followingId : req.params.user_id
     };
 

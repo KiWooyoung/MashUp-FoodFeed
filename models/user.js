@@ -189,7 +189,7 @@ class User {
             const unFollowing = () => {
                 return new Promise((resolve, reject) => {
                     let sql = "DELETE FROM follow WHERE follower_id=? AND following_id=?";
-                    dbConn.query(sql, [info.followerId, info.followingId], (err, result) => {
+                    dbConn.query(sql, [info.unfollowerId, info.followingId], (err, result) => {
                         if (err) {
                             reject(err)
                         } else {
