@@ -5,16 +5,17 @@ import favicon from'serve-favicon';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+// import http from 'http';
 
-import auth from './routes/auth';
-import feed from './routes/feed';
-import search from './routes/search';
-import user from './routes/user';
+import auth from '../routes/auth';
+import feed from '../routes/feed';
+import search from '../routes/search';
+import user from '../routes/user';
 
 const app = express();
 
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
+import swaggerDocument from '../../swagger.json';
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -35,6 +36,15 @@ app.use('/feed', feed);
 app.use('/search', search);
 app.use('/user', user);
 
+
+// let port = 0;
+//
+// if(process.env.NODE_ENV === 'development') {
+//     port = process.env.DEVELOPMENT_PORT;
+// } else {
+//     port = process.env.PRODUCTION_PORT;
+// }
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   var err = new Error('Not Found');
@@ -52,5 +62,10 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// const server = http.createServer(app);
+// server.listen(port, () => {
+//     console.log(`Express is running on port ${port}`);
+// });
 
 module.exports = app;

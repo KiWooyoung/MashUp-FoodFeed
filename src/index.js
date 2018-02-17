@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('./app/app');
 var debug = require('debug')('foodfeed:server');
 var http = require('http');
 
