@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/development.js",
-    "build": "babel src -d build",
-    "start": "nodemon build",
+    "build": "babel src -d buildfoodfeed",
+    "start": "nodemon buildfoodfeed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
