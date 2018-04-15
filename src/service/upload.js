@@ -23,7 +23,7 @@ const uploadImg = multer({
         },
         key: function (req, file, callback) {
             let newFileName = Date.now() + '-' + file.originalname + '-' + generateRandom(1,5);
-            let fullPath = 'dev/yum/postImg/' + newFileName;
+            let fullPath = 'foodfeed/' + newFileName;
             callback(null, fullPath);
         },
         limits: {fileSize: 10 * 1024 * 1024}
