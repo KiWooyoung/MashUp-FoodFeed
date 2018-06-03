@@ -7,12 +7,13 @@
 var app = require('./app/app');
 var debug = require('debug')('foodfeed:server');
 var http = require('http');
-
+// console.log(process.env.DEVELOPMENT_PORT);
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3003');
+console.log(port);
 app.set('port', port);
 
 /**
